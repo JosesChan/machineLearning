@@ -109,7 +109,6 @@ SSE0, SSE1, SSE2, SSE3, SSE6, SSE10
 # There is no need to split the data here. Just simply treat the whole data as training data. The plots for
 # each degree can be either in the same graph (preferable) or in different ones.
 
-
 # Section 1.3: Evaluation (10%).
 # Using the returned results of the pol_regression function from the previous section, you need now
 # to evaluate the performance of your algorithm. To do so, you first need to implement the following
@@ -178,6 +177,11 @@ SSE0, SSE1, SSE2, SSE3, SSE6, SSE10
 # Euclidean distance
 # • The function initialise_centroids() randomly initializes the centroids
 # • The function kmeans() clusters the data into k groups 
+
+def compute_euclidean_distance():
+
+def initialise_centroids():
+def kmeans:
 
 
 # Section 2.2: clustering the dog breed data (15%).
