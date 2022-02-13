@@ -1,9 +1,7 @@
-from array import array
-from doctest import OutputChecker
-from tkinter import Y
 import numpy
 import numpy.linalg as linalg
 import matplotlib as plt
+import matplotlib.pyplot as plt
 import pandas
 
 polyTest = pandas.read_csv('Task1 - dataset - pol_regression.csv')
@@ -13,10 +11,16 @@ polyTest = pandas.read_csv('Task1 - dataset - pol_regression.csv')
 # You are asked to implement the polynomial regression algorithm. To do so, you are required to
 # use the following function:
 
-def pol_regression(features_train, x_Values, degree):
-    coefficients = numpy.polyfit(features_train, x_Values, degree)
-    polynomialcoefficient = numpy.poly1d(coefficients)    
-    return polynomialcoefficient
+def pol_regression(x_values, y_values, degree):
+    polynomialCoefficient = getPolynomialDataMatrix(x_values,degree)
+    polynomialWeights = getWeightsForPolynomialFit(x_values,y_values,degree)
+    Yhat = numpy.dot(polynomialCoefficient, polynomialWeights)
+
+    d1 = y_values - Yhat
+    d2 = y_values - y_values.mean()
+    r2 = 1 - d1.dot(d1) / d2.dot(d2)
+    print("r-squared value: ", r2)  
+    return polynomialCoefficient
 
 # Section 1.2: Regress a polynomial of the following degrees: 0, 1, 2, 3, 6, 10 (10%).
 # After implementing the pol_regression function, use this function to regress the data set given in
@@ -25,8 +29,9 @@ def pol_regression(features_train, x_Values, degree):
 # the training points. Interpret and elaborate on your results. Which polynomial function would you
 # choose?
 
-x_Values = polyTest['x']
-x_Values = polyTest['y']
+x_values = polyTest['x']
+y_values = polyTest['y']
+x_values_sorted = numpy.sort(x_values)
 
 degreesList = [0, 1, 2, 3, 6, 10]
 
@@ -39,72 +44,72 @@ def getPolynomialDataMatrix(x, degree):
 
 def getWeightsForPolynomialFit(x,y,degree):
     X = getPolynomialDataMatrix(x, degree)
-
     XX = X.transpose().dot(X)
     w = numpy.linalg.solve(XX, X.transpose().dot(y))
-    #w = np.linalg.inv(XX).dot(X.transpose().dot(y))
-
     return w
 
-plt.figure()
-plt.scatter(x_Values, x_Values)
-plt.plot(x_Values,x_Values, 'k')
-plt.plot(x_Values,x_Values, 'bo')
+# evaluatate polynomial coefficients
+def polynomialCoefficients(x, coefficients):
+    o = len(coefficients)
+    y = 0
+    for i in range(o):
+        y += coefficients[i]*x**i
+    return y
 
-w0 = getWeightsForPolynomialFit(x_Values,x_Values,0)
-Xtest0 = getPolynomialDataMatrix(polyTest['x'], 0)
-ytest0 = Xtest0.dot(w0)
-plt.plot(x_Values, ytest0, 'b')
+# plt.figure()
+# plt.scatter(x_Values, x_Values)
+# plt.plot(x_Values,x_Values, 'k')
+# plt.plot(x_Values,x_Values, 'bo')
 
-w1 = getWeightsForPolynomialFit(x_Values,x_Values,1)
-Xtest1 = getPolynomialDataMatrix(polyTest['x'], 1)
-ytest1 = Xtest1.dot(w1)
-plt.plot(x_Values, ytest1, 'g')
+w0 = getWeightsForPolynomialFit(x_values,y_values,0)
+coefficients0 = polynomialCoefficients(x_values_sorted,w0)
+plt.plot(x_values_sorted, coefficients0, 'b')
 
-w2 = getWeightsForPolynomialFit(x_Values,x_Values,2)
-Xtest2 = getPolynomialDataMatrix(polyTest['x'], 2)
-ytest2 = Xtest2.dot(w2)
-plt.plot(x_Values, ytest2, 'y')
+w1 = getWeightsForPolynomialFit(x_values,y_values,1)
+coefficients1 = polynomialCoefficients(x_values_sorted,w1)
+plt.plot(x_values_sorted, coefficients1, 'g')
 
-w3 = getWeightsForPolynomialFit(x_Values,x_Values,3)
-Xtest3 = getPolynomialDataMatrix(polyTest['x'], 3)
-ytest3 = Xtest3.dot(w3)
-plt.plot(x_Values, ytest3, 'm')
+w2 = getWeightsForPolynomialFit(x_values,y_values,2)
+coefficients2 = polynomialCoefficients(x_values_sorted,w2)
+plt.plot(x_values_sorted, coefficients2, 'y')
 
-w6 = getWeightsForPolynomialFit(x_Values,x_Values,6)
-Xtest6 = getPolynomialDataMatrix(polyTest['x'], 6)
-ytest6 = Xtest6.dot(w6)
-plt.plot(x_Values, ytest6, 'r')
+w3 = getWeightsForPolynomialFit(x_values,y_values,3)
+coefficients3 = polynomialCoefficients(x_values_sorted,w3)
+plt.plot(x_values_sorted, coefficients3, 'm')
 
-w10 = getWeightsForPolynomialFit(x_Values,x_Values,10)
-Xtest10 = getPolynomialDataMatrix(polyTest['x'], 10)
-ytest10 = Xtest10.dot(w10)
-plt.plot(x_Values, ytest10, 'c')
+w6 = getWeightsForPolynomialFit(x_values,y_values,6)
+coefficients6 = polynomialCoefficients(x_values_sorted,w6)
+plt.plot(x_values_sorted, coefficients6, 'r')
+
+w10 = getWeightsForPolynomialFit(x_values,y_values,10)
+coefficients10 = polynomialCoefficients(x_values_sorted,w10)
+plt.plot(x_values_sorted, coefficients10, 'c')
     
 plt.ylim((-5, 5))
 plt.legend(('training points', 'ground truth', '$x^{0}$', '$x^{1}$', '$x^{2}$', '$x^{3}$', '$x^{10}$'), loc = 'lower right')
+plt.show()
 plt.savefig('polynomial.png')
 
 # find errors in dataset
-error0 = polyTest['y']-ytest0
-SSE0 = error0.dot(error0)
+# error0 = polyTest['y']-ytest0
+# SSE0 = error0.dot(error0)
 
-error1 = polyTest['y']-ytest1
-SSE1 = error1.dot(error1)
+# error1 = polyTest['y']-ytest1
+# SSE1 = error1.dot(error1)
 
-error2 = polyTest['y']-ytest2
-SSE2 = error2.dot(error2)
+# error2 = polyTest['y']-ytest2
+# SSE2 = error2.dot(error2)
 
-error3 = polyTest['y']-ytest3
-SSE3 = error3.dot(error3)
+# error3 = polyTest['y']-ytest3
+# SSE3 = error3.dot(error3)
 
-error6 = polyTest['y']-ytest6
-SSE6 = error6.dot(error6)
+# error6 = polyTest['y']-ytest6
+# SSE6 = error6.dot(error6)
 
-error10 = polyTest['y']-ytest10
-SSE10 = error10.dot(error10)
+# error10 = polyTest['y']-ytest10
+# SSE10 = error10.dot(error10)
 
-SSE0, SSE1, SSE2, SSE3, SSE6, SSE10
+# SSE0, SSE1, SSE2, SSE3, SSE6, SSE10
 
 # There is no need to split the data here. Just simply treat the whole data as training data. The plots for
 # each degree can be either in the same graph (preferable) or in different ones.
@@ -178,10 +183,10 @@ SSE0, SSE1, SSE2, SSE3, SSE6, SSE10
 # • The function initialise_centroids() randomly initializes the centroids
 # • The function kmeans() clusters the data into k groups 
 
-def compute_euclidean_distance():
+# def compute_euclidean_distance():
 
-def initialise_centroids():
-def kmeans:
+# def initialise_centroids():
+# def kmeans:
 
 
 # Section 2.2: clustering the dog breed data (15%).
