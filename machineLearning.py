@@ -5,6 +5,7 @@ import numpy.linalg as linalg
 import matplotlib as plt
 import matplotlib.pyplot as plt
 import pandas
+from sklearn.model_selection import train_test_split
 
 polyTest = pandas.read_csv('Task1 - dataset - pol_regression.csv')
 
@@ -128,7 +129,7 @@ rmse10 = eval_pol_regression(w10, polyTest['x'], polyTest['y'], 10)
 # and underfitting? Explain your findings in great detail. 
 
 
-# = train_test_split()
+xTrainDataT1, xTestDataT1, yTrainDataT1, yTestDataT1 = train_test_split(polyTest['x'], polyTest['y'], train_size = 0.70, test_size = 0.30)
 
 # Task 2 (30%): In this task, several data for specific dog breeds have been collected. You will need
 # to download the Task2 - dataset - dog_breeds.csv file. The data include four features, which are
