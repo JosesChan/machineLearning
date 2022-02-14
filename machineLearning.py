@@ -93,6 +93,7 @@ plt.savefig('polynomial.png')
 # to evaluate the performance of your algorithm. To do so, you first need to implement the following
 # function:
 
+# may output with imaginary units
 def eval_pol_regression(parameters, x, y, degree):
     # Sum squared error
     xTest = getPolynomialDataMatrix(x, degree)
@@ -130,6 +131,44 @@ rmse10 = eval_pol_regression(w10, polyTest['x'], polyTest['y'], 10)
 
 
 xTrainDataT1, xTestDataT1, yTrainDataT1, yTestDataT1 = train_test_split(polyTest['x'], polyTest['y'], train_size = 0.70, test_size = 0.30)
+
+#training
+w0 = pol_regression(x_values,y_values,0)
+coefficients0 = polynomialCoefficients(x_values_sorted,w0)
+
+w1 = pol_regression(x_values,y_values,1)
+coefficients1 = polynomialCoefficients(x_values_sorted,w1)
+
+w2 = pol_regression(x_values,y_values,2)
+coefficients2 = polynomialCoefficients(x_values_sorted,w2)
+
+w3 = pol_regression(x_values,y_values,3)
+coefficients3 = polynomialCoefficients(x_values_sorted,w3)
+
+w6 = pol_regression(x_values,y_values,6)
+coefficients6 = polynomialCoefficients(x_values_sorted,w6)
+
+w10 = pol_regression(x_values,y_values,10)
+coefficients10 = polynomialCoefficients(x_values_sorted,w10)
+
+# testing
+w0 = pol_regression(x_values,y_values,0)
+coefficients0 = polynomialCoefficients(x_values_sorted,w0)
+
+w1 = pol_regression(x_values,y_values,1)
+coefficients1 = polynomialCoefficients(x_values_sorted,w1)
+
+w2 = pol_regression(x_values,y_values,2)
+coefficients2 = polynomialCoefficients(x_values_sorted,w2)
+
+w3 = pol_regression(x_values,y_values,3)
+coefficients3 = polynomialCoefficients(x_values_sorted,w3)
+
+w6 = pol_regression(x_values,y_values,6)
+coefficients6 = polynomialCoefficients(x_values_sorted,w6)
+
+w10 = pol_regression(x_values,y_values,10)
+coefficients10 = polynomialCoefficients(x_values_sorted,w10)
 
 # Task 2 (30%): In this task, several data for specific dog breeds have been collected. You will need
 # to download the Task2 - dataset - dog_breeds.csv file. The data include four features, which are
