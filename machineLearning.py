@@ -1,4 +1,6 @@
+from cmath import sqrt
 import numpy
+import numpy as np
 import numpy.linalg as linalg
 import matplotlib as plt
 import matplotlib.pyplot as plt
@@ -6,21 +8,20 @@ import pandas
 
 polyTest = pandas.read_csv('Task1 - dataset - pol_regression.csv')
 
-
 # Section 1.1: Implementation of Polynomial Regression (10%).
 # You are asked to implement the polynomial regression algorithm. To do so, you are required to
 # use the following function:
 
-def pol_regression(x_values, y_values, degree):
-    polynomialCoefficient = getPolynomialDataMatrix(x_values,degree)
-    polynomialWeights = getWeightsForPolynomialFit(x_values,y_values,degree)
-    Yhat = numpy.dot(polynomialCoefficient, polynomialWeights)
-
-    d1 = y_values - Yhat
-    d2 = y_values - y_values.mean()
-    r2 = 1 - d1.dot(d1) / d2.dot(d2)
-    print("r-squared value: ", r2)  
-    return polynomialCoefficient
+def pol_regression(features_train, y_train, degree):
+    X = getPolynomialDataMatrix(features_train, degree)
+    XX = X.transpose().dot(X)
+    if (degree == 0):
+        average = numpy.average(y_train)
+        meanList = numpy.ones(1,)
+        w = numpy.multiply(meanList, average)
+        return w
+    w = numpy.linalg.solve(XX, X.transpose().dot(y_train))
+    return w  
 
 # Section 1.2: Regress a polynomial of the following degrees: 0, 1, 2, 3, 6, 10 (10%).
 # After implementing the pol_regression function, use this function to regress the data set given in
@@ -29,25 +30,19 @@ def pol_regression(x_values, y_values, degree):
 # the training points. Interpret and elaborate on your results. Which polynomial function would you
 # choose?
 
+
 x_values = polyTest['x']
 y_values = polyTest['y']
 x_values_sorted = numpy.sort(x_values)
 
 degreesList = [0, 1, 2, 3, 6, 10]
 
-
 def getPolynomialDataMatrix(x, degree):
     X = numpy.ones(x.shape)
     for i in range(1,degree + 1):
         X = numpy.column_stack((X, x ** i))
     return X
-
-def getWeightsForPolynomialFit(x,y,degree):
-    X = getPolynomialDataMatrix(x, degree)
-    XX = X.transpose().dot(X)
-    w = numpy.linalg.solve(XX, X.transpose().dot(y))
-    return w
-
+    
 # evaluatate polynomial coefficients
 def polynomialCoefficients(x, coefficients):
     o = len(coefficients)
@@ -56,60 +51,38 @@ def polynomialCoefficients(x, coefficients):
         y += coefficients[i]*x**i
     return y
 
-# plt.figure()
-# plt.scatter(x_Values, x_Values)
-# plt.plot(x_Values,x_Values, 'k')
-# plt.plot(x_Values,x_Values, 'bo')
 
-w0 = getWeightsForPolynomialFit(x_values,y_values,0)
+plt.plot(x_values, y_values, "ro")
+
+w0 = pol_regression(x_values,y_values,0)
 coefficients0 = polynomialCoefficients(x_values_sorted,w0)
-plt.plot(x_values_sorted, coefficients0, 'b')
+plt.plot(x_values, coefficients0, 'b')
 
-w1 = getWeightsForPolynomialFit(x_values,y_values,1)
+w1 = pol_regression(x_values,y_values,1)
 coefficients1 = polynomialCoefficients(x_values_sorted,w1)
 plt.plot(x_values_sorted, coefficients1, 'g')
 
-w2 = getWeightsForPolynomialFit(x_values,y_values,2)
+w2 = pol_regression(x_values,y_values,2)
 coefficients2 = polynomialCoefficients(x_values_sorted,w2)
 plt.plot(x_values_sorted, coefficients2, 'y')
 
-w3 = getWeightsForPolynomialFit(x_values,y_values,3)
+w3 = pol_regression(x_values,y_values,3)
 coefficients3 = polynomialCoefficients(x_values_sorted,w3)
 plt.plot(x_values_sorted, coefficients3, 'm')
 
-w6 = getWeightsForPolynomialFit(x_values,y_values,6)
+w6 = pol_regression(x_values,y_values,6)
 coefficients6 = polynomialCoefficients(x_values_sorted,w6)
 plt.plot(x_values_sorted, coefficients6, 'r')
 
-w10 = getWeightsForPolynomialFit(x_values,y_values,10)
+w10 = pol_regression(x_values,y_values,10)
 coefficients10 = polynomialCoefficients(x_values_sorted,w10)
 plt.plot(x_values_sorted, coefficients10, 'c')
     
-plt.ylim((-5, 5))
-plt.legend(('training points', 'ground truth', '$x^{0}$', '$x^{1}$', '$x^{2}$', '$x^{3}$', '$x^{10}$'), loc = 'lower right')
+plt.xlim((-5, 5))
+plt.legend(('training points', '$x^{0}$', '$x^{1}$', '$x^{2}$', '$x^{3}$','$x^{6}$', '$x^{10}$'), loc = 'lower right')
 plt.show()
 plt.savefig('polynomial.png')
 
-# find errors in dataset
-# error0 = polyTest['y']-ytest0
-# SSE0 = error0.dot(error0)
-
-# error1 = polyTest['y']-ytest1
-# SSE1 = error1.dot(error1)
-
-# error2 = polyTest['y']-ytest2
-# SSE2 = error2.dot(error2)
-
-# error3 = polyTest['y']-ytest3
-# SSE3 = error3.dot(error3)
-
-# error6 = polyTest['y']-ytest6
-# SSE6 = error6.dot(error6)
-
-# error10 = polyTest['y']-ytest10
-# SSE10 = error10.dot(error10)
-
-# SSE0, SSE1, SSE2, SSE3, SSE6, SSE10
 
 # There is no need to split the data here. Just simply treat the whole data as training data. The plots for
 # each degree can be either in the same graph (preferable) or in different ones.
@@ -119,36 +92,22 @@ plt.savefig('polynomial.png')
 # to evaluate the performance of your algorithm. To do so, you first need to implement the following
 # function:
 
-# def eval_pol_regression(inputX,outputY):
-#     #calculate r-squared
-#     yhat = polynomialCoeffs(features_train)
-#     ybar = numpy.sum(x_Values)/len(x_Values)
-#     sumSquareRegression = numpy.sum((yhat-ybar)**2)
-#     sumSquareTotal = numpy.sum((x_Values - ybar)**2)
-#     polyResults['r_squared'] = sumSquareRegression / sumSquareTotal
+def eval_pol_regression(parameters, x, y, degree):
+    # Sum squared error
+    xTest = getPolynomialDataMatrix(x, degree)
+    yTest = xTest.dot(parameters)
+    error = y-yTest
+    sse = error.dot(error)
+    mse = sse/len(x)
+    rmse = sqrt(mse)
+    return (rmse)
 
-
-# SSEtrain = np.zeros((11,1))
-# SSEtest = np.zeros((11,1))
-# MSSEtrain = np.zeros((11,1))
-# MSSEtest = np.zeros((11,1))
-
-# # Feel free to use the functions getWeightsForPolynomialFit and getPolynomialDataMatrix
-# for i in range(1,12):
-    
-#     Xtrain = getPolynomialDataMatrix(x_Values, i) 
-#     Xtest = getPolynomialDataMatrix(x_test, i)
-    
-#     w = getWeightsForPolynomialFit(x_Values, x_Values, i)  
-    
-#     MSSEtrain[i - 1] = np.mean((Xtrain.dot(w) - x_Values)**2)
-#     MSSEtest[i - 1] = np.mean((Xtest.dot(w) - y_test)**2)
-    
-#     errortrain = x_Values - Xtrain.dot(w) 
-#     errortest = y_test - Xtest.dot(w)
-#     SSEtrain[i-1] = errortrain.dot(errortrain)
-#     SSEtest[i-1] = errortest.dot(errortest)
-    
+rmse0 = eval_pol_regression(w0, polyTest['x'], polyTest['y'], 0)
+rmse1 = eval_pol_regression(w1, polyTest['x'], polyTest['y'], 1)
+rmse2 = eval_pol_regression(w2, polyTest['x'], polyTest['y'], 2)
+rmse3 = eval_pol_regression(w3, polyTest['x'], polyTest['y'], 3)
+rmse6 = eval_pol_regression(w6, polyTest['x'], polyTest['y'], 6)
+rmse10 = eval_pol_regression(w10, polyTest['x'], polyTest['y'], 10)
 
 
 
