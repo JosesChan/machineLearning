@@ -8,6 +8,8 @@ import pandas
 from sklearn.model_selection import train_test_split
 
 polyTest = pandas.read_csv('Task1 - dataset - pol_regression.csv')
+dataframe = pandas.read_csv("Task2 - dataset - dog_breeds.csv")
+dataset = dataframe.values
 
 # Section 1.1: Implementation of Polynomial Regression (10%).
 # You are asked to implement the polynomial regression algorithm. To do so, you are required to
@@ -104,12 +106,12 @@ def eval_pol_regression(parameters, x, y, degree):
     rmse = sqrt(mse)
     return (rmse)
 
-rmse0 = eval_pol_regression(w0, polyTest['x'], polyTest['y'], 0)
-rmse1 = eval_pol_regression(w1, polyTest['x'], polyTest['y'], 1)
-rmse2 = eval_pol_regression(w2, polyTest['x'], polyTest['y'], 2)
-rmse3 = eval_pol_regression(w3, polyTest['x'], polyTest['y'], 3)
-rmse6 = eval_pol_regression(w6, polyTest['x'], polyTest['y'], 6)
-rmse10 = eval_pol_regression(w10, polyTest['x'], polyTest['y'], 10)
+rmse0 = eval_pol_regression(w0, x_values, y_values, 0)
+rmse1 = eval_pol_regression(w1, x_values, y_values, 1)
+rmse2 = eval_pol_regression(w2, x_values, y_values, 2)
+rmse3 = eval_pol_regression(w3, x_values, y_values, 3)
+rmse6 = eval_pol_regression(w6, x_values, y_values, 6)
+rmse10 = eval_pol_regression(w10, x_values, y_values, 10)
 
 
 
@@ -132,43 +134,43 @@ rmse10 = eval_pol_regression(w10, polyTest['x'], polyTest['y'], 10)
 
 xTrainDataT1, xTestDataT1, yTrainDataT1, yTestDataT1 = train_test_split(polyTest['x'], polyTest['y'], train_size = 0.70, test_size = 0.30)
 
-#training
-w0 = pol_regression(x_values,y_values,0)
-coefficients0 = polynomialCoefficients(x_values_sorted,w0)
+# #training
+# w0 = pol_regression(x_values,y_values,0)
+# coefficients0 = polynomialCoefficients(x_values_sorted,w0)
 
-w1 = pol_regression(x_values,y_values,1)
-coefficients1 = polynomialCoefficients(x_values_sorted,w1)
+# w1 = pol_regression(x_values,y_values,1)
+# coefficients1 = polynomialCoefficients(x_values_sorted,w1)
 
-w2 = pol_regression(x_values,y_values,2)
-coefficients2 = polynomialCoefficients(x_values_sorted,w2)
+# w2 = pol_regression(x_values,y_values,2)
+# coefficients2 = polynomialCoefficients(x_values_sorted,w2)
 
-w3 = pol_regression(x_values,y_values,3)
-coefficients3 = polynomialCoefficients(x_values_sorted,w3)
+# w3 = pol_regression(x_values,y_values,3)
+# coefficients3 = polynomialCoefficients(x_values_sorted,w3)
 
-w6 = pol_regression(x_values,y_values,6)
-coefficients6 = polynomialCoefficients(x_values_sorted,w6)
+# w6 = pol_regression(x_values,y_values,6)
+# coefficients6 = polynomialCoefficients(x_values_sorted,w6)
 
-w10 = pol_regression(x_values,y_values,10)
-coefficients10 = polynomialCoefficients(x_values_sorted,w10)
+# w10 = pol_regression(x_values,y_values,10)
+# coefficients10 = polynomialCoefficients(x_values_sorted,w10)
 
-# testing
-w0 = pol_regression(x_values,y_values,0)
-coefficients0 = polynomialCoefficients(x_values_sorted,w0)
+# # testing
+# w0 = pol_regression(x_values,y_values,0)
+# coefficients0 = polynomialCoefficients(x_values_sorted,w0)
 
-w1 = pol_regression(x_values,y_values,1)
-coefficients1 = polynomialCoefficients(x_values_sorted,w1)
+# w1 = pol_regression(x_values,y_values,1)
+# coefficients1 = polynomialCoefficients(x_values_sorted,w1)
 
-w2 = pol_regression(x_values,y_values,2)
-coefficients2 = polynomialCoefficients(x_values_sorted,w2)
+# w2 = pol_regression(x_values,y_values,2)
+# coefficients2 = polynomialCoefficients(x_values_sorted,w2)
 
-w3 = pol_regression(x_values,y_values,3)
-coefficients3 = polynomialCoefficients(x_values_sorted,w3)
+# w3 = pol_regression(x_values,y_values,3)
+# coefficients3 = polynomialCoefficients(x_values_sorted,w3)
 
-w6 = pol_regression(x_values,y_values,6)
-coefficients6 = polynomialCoefficients(x_values_sorted,w6)
+# w6 = pol_regression(x_values,y_values,6)
+# coefficients6 = polynomialCoefficients(x_values_sorted,w6)
 
-w10 = pol_regression(x_values,y_values,10)
-coefficients10 = polynomialCoefficients(x_values_sorted,w10)
+# w10 = pol_regression(x_values,y_values,10)
+# coefficients10 = polynomialCoefficients(x_values_sorted,w10)
 
 # Task 2 (30%): In this task, several data for specific dog breeds have been collected. You will need
 # to download the Task2 - dataset - dog_breeds.csv file. The data include four features, which are
@@ -182,38 +184,106 @@ coefficients10 = polynomialCoefficients(x_values_sorted,w10)
 # • The function initialise_centroids() randomly initializes the centroids
 # • The function kmeans() clusters the data into k groups 
 
-# def compute_euclidean_distance():
+# calculates the distance between samples
+def compute_euclidean_distance(vec_1, vec_2):
+    length = len(vec_1)
+    euclidDistance = 0
+    for i in range(length):
+        euclidDistance += pow(vec_1[i] - vec_2[i],2)#power of 2
+    return np.sqrt(euclidDistance)
 
-# def initialise_centroids():
-# def kmeans:
+# intialise center of clusters
+def initialise_centroids(dataset, k):
+    centroids = np.zeros([k,4]) 
+    for i in range(k):
+        randomInt = np.random.randint(0,len(dataset))
+        centroids[i] = dataset[randomInt]    
+    return centroids
 
 
-# Section 2.2: clustering the dog breed data (15%).
-# After implementing the kmeans() function, use it to cluster the dog breed data. You need to run
-# your k-means algorithm with all the four features as input. You should not slice the data to have
-# two features for calculating Euclidean distance in k-means. Having said that, you need to cluster
-# the data based on the four features instead of a portion of them. Use two different values for the
-# parameter k: 2 and 3.
-# Draw the following three plots for the K-Means clustering results:
-# a) The first plot is a scatter plot, where x axis is the “height” feature and y axis is the “tail length”
-# feature; Use different colours for the different cluster data points.
-# b) The second plot is also a scatter plot, where x axis is the “height” feature and y axis is the “leg
-# length” feature; As before use different colours to depict the data points from different
-# clusters.
-# c) The third plot is a line plot, where x axis is the ‘iteration step’ and y axis is the ‘objective
-# function value’. The plot should show a decreasing trend! You must plot the objective
-# function (error function) at each iteration when you train the model.
+# cluster into k amount of groups, calculating average distance between centroids and data
+def kmeans(dataset, k):
+    
+    # initialise centroids and other variables
+    centroids = initialise_centroids(dataset, k) #creating the first centroids
+    distance = np.zeros(k)
+    clusters = np.zeros(len(dataset)) 
+    obj = [] # all summation values for error function
 
-# Please generate the above three requested plots for k = 2 and do the same for k =3. The plotting
-# tasks are just to display your clustering results in a 2-D space (height-length) for one k value. Since
-# there are two k values, you should run your k-means ONLY TWICE, no matter how many plots you
-# need to produce. Anyway, you will need to produce three plots for each k value, and they should
-# not suggest you to re-run your algorithm for each plot.
-# Note: You need to implement the simple K-Means clustering following the above steps by yourself,
-# group work is not allowed! You are allowed to use numpy, pandas and matplotlib libraries for
-# processing and plotting data. However, other data science and machine learning libraries such as
-# scikit-learn or other built-in libraries that have implemented the k-means algorithm are prohibited
-# in this coursework. 
+    # number of iterations for recalculation
+    for i in range(10):
+        errorFunctionValues, clusters, meanCentroids = recalculateClusters(distance, clusters, dataset, k)
+        # append closest distance, to get error function
+        obj.append(errorFunctionValues)
+        # recalculate centroids
+        centroids = recalculateCentroids(meanCentroids, clusters, dataset, k)
+
+    return centroids, clusters, obj
+
+# meanCentroid holds the average distance of each centroid
+# clusters holds the available types of clusters data can be categorized under
+# using the parameters, it recalculates centroid locations
+def recalculateCentroids(meanCentroids, clusters, dataset, k):
+    # variable to store centroid locations
+    newCentroids = np.zeros([k,4])
+    # recalculate each centroid
+    for selectedCentroid in range(k):
+        for features in range(4):
+            # average of each centroid and assigns as new centroid
+            newCentroids[selectedCentroid][features] = (meanCentroids[selectedCentroid][features])/(len(dataset[clusters==selectedCentroid]))
+    return newCentroids
+
+# distance represents the distance between centroid and its closest datapoint
+def recalculateClusters(distance, clusters, dataset, k):
+    meanCentroids = np.zeros([k,4])
+    errorFunction = 0
+    # for entire dataset, find closest datapoints
+    for currentDataPoint in range(len(dataset)):    
+        for selectedCentroid in range(k):
+            
+            distance[selectedCentroid] = compute_euclidean_distance(dataset[currentDataPoint], centroids[selectedCentroid])
+            
+            # find minimum distance through index values
+            closest = np.where(distance == np.min(distance))[0][0]
+            
+            # post processing
+            errorFunction += distance[closest]  
+            clusters[currentDataPoint] = closest      
+            meanCentroids[closest] += dataset[currentDataPoint]
+    return errorFunction, clusters, meanCentroids
+
+# plots objective/error function graph
+def plotErrorFunction(datapoints):
+    plt.plot(range(len(datapoints)), datapoints, 'o-', label='Error Function')
+    plt.xlabel("Iteration Step")
+    plt.ylabel("Objective Function")
+    plt.legend()
+    plt.show()
+
+# plot cluster graphs
+def plotCluster(dataset, centroids, clusters, x, y, labels):
+    #only showing column 0 1 or 0 and 2 (height and tail-length/ leg-length)
+    plt.scatter(dataset[:,x],dataset[:,y], c = clusters)
+    plt.scatter(centroids[:,x], centroids[:,y], c = 'r')
+    plt.xlabel(labels[x])
+    plt.ylabel(labels[y])
+    plt.show()    
+
+
+centroids, clusters, datapoints = kmeans(dataset, 2)
+plotErrorFunction(datapoints)
+plotCluster(dataset,centroids,clusters,0,1,dataset.columns) 
+plotCluster(dataset,centroids,clusters,0,2,dataset.columns) 
+plotCluster(dataset,centroids,clusters,0,3,dataset.columns) 
+
+
+centroids, clusters, datapoints = kmeans(dataset, 3)
+plotErrorFunction(datapoints)
+plotCluster(dataset,centroids,clusters,0,1,dataset.columns) 
+plotCluster(dataset,centroids,clusters,0,2,dataset.columns) 
+plotCluster(dataset,centroids,clusters,0,3,dataset.columns) 
+
+
 
 
 
