@@ -5,10 +5,13 @@ import numpy.linalg as linalg
 import matplotlib as plt
 import matplotlib.pyplot as plt
 import pandas
+import seaborn
+
 from sklearn.model_selection import train_test_split
 
-polyTest = pandas.read_csv('Task1 - dataset - pol_regression.csv')
+polyTest = pandas.read_csv("Task1 - dataset - pol_regression.csv")
 dataframe = pandas.read_csv("Task2 - dataset - dog_breeds.csv")
+hivDataset = pandas.read_csv("Task3 - dataset - HIV RVG.csv")
 dataset = dataframe.values
 
 # Section 1.1: Implementation of Polynomial Regression (10%).
@@ -327,6 +330,53 @@ plotCluster(dataset,centroids,clusters,0,3,dataset.columns)
 # appearing in the same plot. What information can be obtained from each of these two plots? Can
 # one use any of these two plots to identify outliers? If yes, please elaborate.
 # Please include your explanation of implementation alongside the plots.
+
+
+
+# box plot of status classes (Participant Condition) and alpha
+
+hivDataset
+
+seaborn.boxplot(x=hivDataset["Participant Condition"], y=hivDataset["Alpha"], hue="Status")
+
+# density plot 
+
+seaborn.displot(x=hivDataset["Beta"], kind = "kde")
+
+for i in featureNames:
+    plt.figure()
+    seaborn.boxplot(x=hivDataset["Status"], y=hivDataset[i])
+    print("\nNormal" + i)
+    print("MINIMUM: ") 
+    print(hivDataset[i].max())
+    print("MAX: ") 
+    print(hivDataset[i].min())
+    print("MEAN: ") 
+    print(hivDataset[i].mean())
+    print("MEDIAN: ") 
+    print(hivDataset[i].median())
+    print("MODE: ") 
+    print(hivDataset[i].mode())
+    print("VAR: ") 
+    print(hivDataset[i].var())
+    print("\nAbnormal "+ i)
+    print("MINIMUM: ") 
+    print(hivDataset[i].max())
+    print("MAX: ") 
+    print(hivDataset[i].min())
+    print("MEAN: ") 
+    print(hivDataset[i].mean())
+    print("MEDIAN: ") 
+    print(hivDataset[i].median())
+    print("MODE: ") 
+    print(hivDataset[i].mode())
+    print("VAR: ") 
+    print(hivDataset[i].var())
+    print()
+    plt.savefig('Graph '+i)
+plt.show()
+
+
 
 # Section 3.2 Designing algorithms (15%)
 # You will now design an artificial neural network (ANN) classifier for classifying patients as patient
