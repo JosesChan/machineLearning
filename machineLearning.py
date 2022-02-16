@@ -278,18 +278,18 @@ def plotCluster(dataset, centroids, clusters, x, y, labels):
     plt.show()    
 
 
-centroids, clusters, datapoints = kmeans(dataset, 2)
-plotErrorFunction(datapoints)
-plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
-plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
-plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
+# centroids, clusters, datapoints = kmeans(dataset, 2)
+# plotErrorFunction(datapoints)
+# plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
+# plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
+# plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
 
 
-centroids, clusters, datapoints = kmeans(dataset, 3)
-plotErrorFunction(datapoints)
-plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
-plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
-plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
+# centroids, clusters, datapoints = kmeans(dataset, 3)
+# plotErrorFunction(datapoints)
+# plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
+# plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
+# plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
 
 
 # HIV (human immunodeficiency virus) is a virus that attacks the body's immune system. If HIV is not
@@ -392,6 +392,26 @@ plt.show()
 # minimum number of samples required to be at a leaf node has two options, i.e. 5 and 10. Please
 # report the steps for training random forests for both options and show their accuracy results on
 # the test set.
+
+# x are features to be fed into the classifiers
+# y are labels that are to be predicted by the classifiers
+xHivDataset = hivDataset.values
+xHivDataset = hivDataset.iloc[: , :-1]
+yHivDataset =  hivDataset["Participant Condition"].values
+
+xTrainData, xTestData, yTrainData, yTestData = train_test_split(xHivDataset, yHivDataset, train_size = 0.90, test_size = 0.10)
+
+# variable to hold epoch amount
+epochAmount = 200
+
+# create multilayer perceptron with 2 hidden layers of size 500 each. Set epoch amount
+mlpClassifier = MLPClassifier(hidden_layer_sizes=(500,500), solver="sgd", max_iter=epochAmount)
+
+mlpClassifier.fit(xTrainData, yTrainData)
+
+mlpClassifier.predict(xTestData)
+
+print(mlpClassifier.score(xTestData, yTestData))
 
 
 
