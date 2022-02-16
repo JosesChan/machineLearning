@@ -392,24 +392,45 @@ yHivDataset =  normalisedHivDataset["Participant Condition"].values
 xTrainData, xTestData, yTrainData, yTestData = train_test_split(xHivDataset, yHivDataset, train_size = 0.90, test_size = 0.10)
 
 # variable to hold epoch amount
-epochAmount = 200
 
-# create multilayer perceptron with 2 hidden layers of size 500 each. Set epoch amount
-mlpClassifier = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
+def runMLPClassifier(epochAmount):
 
-mlpClassifier.fit(xTrainData, yTrainData)
+    # create multilayer perceptron with 2 hidden layers of size 500 each. Set epoch amount
+    mlpClassifier = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
 
-mlpClassifier.predict(xTestData)
+    mlpClassifier.fit(xTrainData, yTrainData)
 
-print(mlpClassifier.score(xTestData, yTestData))
+    mlpClassifier.predict(xTestData)
 
-forestClassifier = RandomForestClassifier(n_estimators=1000, min_samples_leaf=5)
+    print(mlpClassifier.score(xTestData, yTestData))
+    return(mlpClassifier.score(xTestData, yTestData))
 
-forestClassifier.fit(xTrainData, yTrainData)
+def runForestClassifier(leafSamples):
+    forestClassifier = RandomForestClassifier(n_estimators=1000, min_samples_leaf=leafSamples)
 
-forestClassifier.predict(xTestData)
+    forestClassifier.fit(xTrainData, yTrainData)
 
-print(forestClassifier.score(xTestData, yTestData))
+    forestClassifier.predict(xTestData)
+
+    print(forestClassifier.score(xTestData, yTestData))
+
+
+def plotAccuracyFunction(datapoints):
+    plt.plot(range(len(datapoints)), datapoints, 'o-', label='Accuracy MLP')
+    plt.xlabel("Epochs")
+    plt.ylabel("Accuracy")
+    plt.legend()
+    plt.show()
+
+accuracyPlot = []
+
+accuracyPlot.append(runMLPClassifier(100))
+accuracyPlot.append(runMLPClassifier(200))
+accuracyPlot.append(runMLPClassifier(300))
+accuracyPlot.append(runMLPClassifier(400))
+accuracyPlot.append(runMLPClassifier(500))
+
+plotAccuracyFunction(accuracyPlot)
 
 
 # Section 3.3: Model selection (15%)
