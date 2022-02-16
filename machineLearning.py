@@ -216,7 +216,7 @@ def kmeans(dataset, k):
     datapoints = [] # all summation values for error function
 
     # number of iterations for recalculation
-    for i in range(20):
+    for i in range(12):
         distance, errorFunction, clusters, sumMinCentroids = recalculateClusters(distance, centroids, clusters, dataset, k)
     
         # append closest distance, to get error function
@@ -291,9 +291,6 @@ plotCluster(dataset,centroids,clusters,0,2,dataframe.columns)
 plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
 
 
-
-
-
 # HIV (human immunodeficiency virus) is a virus that attacks the body's immune system. If HIV is not
 # treated, it can lead to AIDS (acquired immunodeficiency syndrome). In this task, you are required
 # to develop machine learning models to predict HIV infection from measured features. The dataset
@@ -336,48 +333,43 @@ plotCluster(dataset,centroids,clusters,0,3,dataframe.columns)
 # Please include your explanation of implementation alongside the plots.
 
 
-
 # box plot of status classes (Participant Condition) and alpha
-
-hivDataset
-
-seaborn.boxplot(x=hivDataset["Participant Condition"], y=hivDataset["Alpha"], hue="Status")
+seaborn.boxplot(x=hivDataset["Participant Condition"], y=hivDataset["Alpha"])
 
 # density plot 
+seaborn.displot(x=hivDataset["Beta"], kind = "kde", hue=hivDataset["Participant Condition"])
 
-seaborn.displot(x=hivDataset["Beta"], kind = "kde")
-
-for i in featureNames:
-    plt.figure()
-    seaborn.boxplot(x=hivDataset["Status"], y=hivDataset[i])
-    print("\nNormal" + i)
-    print("MINIMUM: ") 
-    print(hivDataset[i].max())
-    print("MAX: ") 
-    print(hivDataset[i].min())
-    print("MEAN: ") 
-    print(hivDataset[i].mean())
-    print("MEDIAN: ") 
-    print(hivDataset[i].median())
-    print("MODE: ") 
-    print(hivDataset[i].mode())
-    print("VAR: ") 
-    print(hivDataset[i].var())
-    print("\nAbnormal "+ i)
-    print("MINIMUM: ") 
-    print(hivDataset[i].max())
-    print("MAX: ") 
-    print(hivDataset[i].min())
-    print("MEAN: ") 
-    print(hivDataset[i].mean())
-    print("MEDIAN: ") 
-    print(hivDataset[i].median())
-    print("MODE: ") 
-    print(hivDataset[i].mode())
-    print("VAR: ") 
-    print(hivDataset[i].var())
-    print()
-    plt.savefig('Graph '+i)
+# for i in featureNames:
+#     plt.figure()
+#     seaborn.boxplot(x=hivDataset["Status"], y=hivDataset[i])
+#     print("\nNormal" + i)
+#     print("MINIMUM: ") 
+#     print(hivDataset[i].max())
+#     print("MAX: ") 
+#     print(hivDataset[i].min())
+#     print("MEAN: ") 
+#     print(hivDataset[i].mean())
+#     print("MEDIAN: ") 
+#     print(hivDataset[i].median())
+#     print("MODE: ") 
+#     print(hivDataset[i].mode())
+#     print("VAR: ") 
+#     print(hivDataset[i].var())
+#     print("\nAbnormal "+ i)
+#     print("MINIMUM: ") 
+#     print(hivDataset[i].max())
+#     print("MAX: ") 
+#     print(hivDataset[i].min())
+#     print("MEAN: ") 
+#     print(hivDataset[i].mean())
+#     print("MEDIAN: ") 
+#     print(hivDataset[i].median())
+#     print("MODE: ") 
+#     print(hivDataset[i].mode())
+#     print("VAR: ") 
+#     print(hivDataset[i].var())
+#     print()
+#     plt.savefig('Graph '+i)
 plt.show()
 
 
