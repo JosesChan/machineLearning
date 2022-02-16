@@ -10,7 +10,7 @@ import seaborn
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_validate, train_test_split
 
 polyTest = pandas.read_csv("Task1 - dataset - pol_regression.csv")
 dataframe = pandas.read_csv("Task2 - dataset - dog_breeds.csv")
@@ -447,10 +447,22 @@ print(forestClassifier.score(xTestData, yTestData))
 # a) which method is best, ANN or random forest?
 # b) Please discuss and justify your choice, reflecting upon your knowledge thus far. 
 
-mlpClassifier = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=epochAmount)
-mlpClassifier = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
-mlpClassifier = MLPClassifier(hidden_layer_sizes=(1000,1000), activation="logistic", max_iter=epochAmount)
+mlpClassifier1 = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=epochAmount)
+mlpCV1 = cross_validate(mlpClassifier1, xTestData, yTestData, cv=10)
+print(mlpCV1["test_score"].mean())
+mlpClassifier2 = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
+mlpCV2 = cross_validate(mlpClassifier2, xTestData, yTestData, cv=10)
+print(mlpCV2["test_score"].mean())
+mlpClassifier3 = MLPClassifier(hidden_layer_sizes=(1000,1000), activation="logistic", max_iter=epochAmount)
+mlpCV3 = cross_validate(mlpClassifier3, xTestData, yTestData, cv=10)
+print(mlpCV3["test_score"].mean())
 
-forestClassifier = RandomForestClassifier(n_estimators=50, min_samples_leaf=5)
-forestClassifier = RandomForestClassifier(n_estimators=500, min_samples_leaf=5)
-forestClassifier = RandomForestClassifier(n_estimators=1000, min_samples_leaf=5)
+forestClassifier1 = RandomForestClassifier(n_estimators=50, min_samples_leaf=5)
+forestCV1 = cross_validate(forestClassifier1, xTestData, yTestData, cv=10)
+print(forestCV1["test_score"].mean())
+forestClassifier2 = RandomForestClassifier(n_estimators=500, min_samples_leaf=5)
+forestCV2 = cross_validate(forestClassifier2, xTestData, yTestData, cv=10)
+print(forestCV2["test_score"].mean())
+forestClassifier3 = RandomForestClassifier(n_estimators=1000, min_samples_leaf=5)
+forestCV3 = cross_validate(forestClassifier3, xTestData, yTestData, cv=10)
+print(forestCV3["test_score"].mean())
