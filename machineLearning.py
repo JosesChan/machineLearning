@@ -405,7 +405,7 @@ xTrainData, xTestData, yTrainData, yTestData = train_test_split(xHivDataset, yHi
 epochAmount = 200
 
 # create multilayer perceptron with 2 hidden layers of size 500 each. Set epoch amount
-mlpClassifier = MLPClassifier(hidden_layer_sizes=(500,500), solver="sgd", max_iter=epochAmount)
+mlpClassifier = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
 
 mlpClassifier.fit(xTrainData, yTrainData)
 
@@ -413,6 +413,7 @@ mlpClassifier.predict(xTestData)
 
 print(mlpClassifier.score(xTestData, yTestData))
 
+forestClassifier = RandomForestClassifier()
 
 
 # Section 3.3: Model selection (15%)
