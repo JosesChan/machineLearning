@@ -447,6 +447,9 @@ print(forestClassifier.score(xTestData, yTestData))
 # a) which method is best, ANN or random forest?
 # b) Please discuss and justify your choice, reflecting upon your knowledge thus far. 
 
+# Grid search parameters to split 
+parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
+
 mlpClassifier1 = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=epochAmount)
 mlpCV1 = cross_validate(mlpClassifier1, xTestData, yTestData, cv=10)
 print(mlpCV1["test_score"].mean())
