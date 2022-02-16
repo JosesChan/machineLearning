@@ -413,7 +413,13 @@ mlpClassifier.predict(xTestData)
 
 print(mlpClassifier.score(xTestData, yTestData))
 
-forestClassifier = RandomForestClassifier()
+forestClassifier = RandomForestClassifier(n_estimators=1000, min_samples_leaf=5)
+
+forestClassifier.fit(xTrainData, yTrainData)
+
+forestClassifier.predict(xTestData)
+
+print(forestClassifier.score(xTestData, yTestData))
 
 
 # Section 3.3: Model selection (15%)
