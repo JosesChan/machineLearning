@@ -8,7 +8,8 @@ import pandas
 import seaborn
 
 
-
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 
 polyTest = pandas.read_csv("Task1 - dataset - pol_regression.csv")
@@ -391,6 +392,8 @@ plt.show()
 # minimum number of samples required to be at a leaf node has two options, i.e. 5 and 10. Please
 # report the steps for training random forests for both options and show their accuracy results on
 # the test set.
+
+
 
 # Section 3.3: Model selection (15%)
 # You have designed ANN and random forests classifiers with almost fixed model parameters (e.g.
