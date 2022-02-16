@@ -430,6 +430,9 @@ accuracyPlot.append(runMLPClassifier(300))
 accuracyPlot.append(runMLPClassifier(400))
 accuracyPlot.append(runMLPClassifier(500))
 
+runForestClassifier(5)
+runForestClassifier(10)
+
 plotAccuracyFunction(accuracyPlot)
 
 
