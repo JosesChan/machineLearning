@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import pandas
 import seaborn
 
+
+
 from sklearn.model_selection import train_test_split
 
 polyTest = pandas.read_csv("Task1 - dataset - pol_regression.csv")
@@ -109,7 +111,7 @@ def eval_pol_regression(parameters, x, y, degree):
     rmse = sqrt(mse)
     return (rmse)
 
-rmse0 = eval_pol_regression(w0, x_values, y_values, 0)
+# rmse0 = eval_pol_regression(w0, x_values, y_values, 0)
 rmse1 = eval_pol_regression(w1, x_values, y_values, 1)
 rmse2 = eval_pol_regression(w2, x_values, y_values, 2)
 rmse3 = eval_pol_regression(w3, x_values, y_values, 3)
@@ -211,34 +213,36 @@ def kmeans(dataset, k):
     centroids = initialise_centroids(dataset, k) #creating the first centroids
     distance = np.zeros(k)
     clusters = np.zeros(len(dataset)) 
-    obj = [] # all summation values for error function
+    datapoints = [] # all summation values for error function
 
     # number of iterations for recalculation
-    for i in range(10):
-        errorFunctionValues, clusters, meanCentroids = recalculateClusters(distance, clusters, dataset, k)
+    for i in range(20):
+        distance, errorFunction, clusters, sumMinCentroids = recalculateClusters(distance, centroids, clusters, dataset, k)
+    
         # append closest distance, to get error function
-        obj.append(errorFunctionValues)
+        datapoints.append(errorFunction)
         # recalculate centroids
-        centroids = recalculateCentroids(meanCentroids, clusters, dataset, k)
+        centroids = recalculateCentroids(sumMinCentroids, clusters, dataset, k)
+    return centroids, clusters, datapoints
 
-    return centroids, clusters, obj
+
 
 # meanCentroid holds the average distance of each centroid
 # clusters holds the available types of clusters data can be categorized under
 # using the parameters, it recalculates centroid locations
-def recalculateCentroids(meanCentroids, clusters, dataset, k):
+def recalculateCentroids(sumMinCentroids, clusters, dataset, k):
     # variable to store centroid locations
     newCentroids = np.zeros([k,4])
     # recalculate each centroid
     for selectedCentroid in range(k):
         for features in range(4):
             # average of each centroid and assigns as new centroid
-            newCentroids[selectedCentroid][features] = (meanCentroids[selectedCentroid][features])/(len(dataset[clusters==selectedCentroid]))
+            newCentroids[selectedCentroid][features] = (sumMinCentroids[selectedCentroid][features])/(len(dataset[clusters==selectedCentroid]))
     return newCentroids
 
 # distance represents the distance between centroid and its closest datapoint
-def recalculateClusters(distance, clusters, dataset, k):
-    meanCentroids = np.zeros([k,4])
+def recalculateClusters(distance, centroids, clusters, dataset, k):
+    sumMinCentroids = np.zeros([k,4])
     errorFunction = 0
     # for entire dataset, find closest datapoints
     for currentDataPoint in range(len(dataset)):    
@@ -246,14 +250,14 @@ def recalculateClusters(distance, clusters, dataset, k):
             
             distance[selectedCentroid] = compute_euclidean_distance(dataset[currentDataPoint], centroids[selectedCentroid])
             
-            # find minimum distance through index values
-            closest = np.where(distance == np.min(distance))[0][0]
+        # find datapoint with minimum distance through index values
+        closest = np.where(distance == np.min(distance))[0][0]
             
-            # post processing
-            errorFunction += distance[closest]  
-            clusters[currentDataPoint] = closest      
-            meanCentroids[closest] += dataset[currentDataPoint]
-    return errorFunction, clusters, meanCentroids
+        # post processing
+        errorFunction += distance[closest]  
+        clusters[currentDataPoint] = closest      
+        sumMinCentroids[closest] += dataset[currentDataPoint]
+    return distance, errorFunction, clusters, sumMinCentroids
 
 # plots objective/error function graph
 def plotErrorFunction(datapoints):
@@ -275,16 +279,16 @@ def plotCluster(dataset, centroids, clusters, x, y, labels):
 
 centroids, clusters, datapoints = kmeans(dataset, 2)
 plotErrorFunction(datapoints)
-plotCluster(dataset,centroids,clusters,0,1,dataset.columns) 
-plotCluster(dataset,centroids,clusters,0,2,dataset.columns) 
-plotCluster(dataset,centroids,clusters,0,3,dataset.columns) 
+plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
 
 
 centroids, clusters, datapoints = kmeans(dataset, 3)
 plotErrorFunction(datapoints)
-plotCluster(dataset,centroids,clusters,0,1,dataset.columns) 
-plotCluster(dataset,centroids,clusters,0,2,dataset.columns) 
-plotCluster(dataset,centroids,clusters,0,3,dataset.columns) 
+plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
 
 
 
