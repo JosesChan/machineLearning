@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import pandas
 import seaborn
 
-
+from sklearn.model_selection import KFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import cross_validate, train_test_split
@@ -447,25 +447,27 @@ print(forestClassifier.score(xTestData, yTestData))
 # a) which method is best, ANN or random forest?
 # b) Please discuss and justify your choice, reflecting upon your knowledge thus far. 
 
-# Grid search parameters to split 
-parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
+# Create number of folds
+folds = 10
+# first n_samples%n_splits folds have the size of n_samples//n_splits+1, the rest are size of n_samples//n_splits
+kfolds = KFold(n_splits=folds)
 
 mlpClassifier1 = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=epochAmount)
-mlpCV1 = cross_validate(mlpClassifier1, xTestData, yTestData, cv=10)
+mlpCV1 = cross_validate(mlpClassifier1, xTestData, yTestData, cv=kfolds, n_jobs=-1)
 print(mlpCV1["test_score"].mean())
 mlpClassifier2 = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
-mlpCV2 = cross_validate(mlpClassifier2, xTestData, yTestData, cv=10)
+mlpCV2 = cross_validate(mlpClassifier2, xTestData, yTestData, cv=kfolds, n_jobs=-1)
 print(mlpCV2["test_score"].mean())
 mlpClassifier3 = MLPClassifier(hidden_layer_sizes=(1000,1000), activation="logistic", max_iter=epochAmount)
-mlpCV3 = cross_validate(mlpClassifier3, xTestData, yTestData, cv=10)
+mlpCV3 = cross_validate(mlpClassifier3, xTestData, yTestData, cv=kfolds, n_jobs=-1)
 print(mlpCV3["test_score"].mean())
 
-forestClassifier1 = RandomForestClassifier(n_estimators=50, min_samples_leaf=5)
-forestCV1 = cross_validate(forestClassifier1, xTestData, yTestData, cv=10)
+forestClassifier1 = RandomForestClassifier(n_estimators=50, min_samples_leaf=10)
+forestCV1 = cross_validate(forestClassifier1, xTestData, yTestData, cv=kfolds, n_jobs=-1)
 print(forestCV1["test_score"].mean())
-forestClassifier2 = RandomForestClassifier(n_estimators=500, min_samples_leaf=5)
-forestCV2 = cross_validate(forestClassifier2, xTestData, yTestData, cv=10)
+forestClassifier2 = RandomForestClassifier(n_estimators=500, min_samples_leaf=10)
+forestCV2 = cross_validate(forestClassifier2, xTestData, yTestData, cv=kfolds, n_jobs=-1)
 print(forestCV2["test_score"].mean())
-forestClassifier3 = RandomForestClassifier(n_estimators=1000, min_samples_leaf=5)
-forestCV3 = cross_validate(forestClassifier3, xTestData, yTestData, cv=10)
+forestClassifier3 = RandomForestClassifier(n_estimators=1000, min_samples_leaf=10)
+forestCV3 = cross_validate(forestClassifier3, xTestData, yTestData, cv=kfolds, n_jobs=-1)
 print(forestCV3["test_score"].mean())
