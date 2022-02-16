@@ -93,9 +93,6 @@ plt.show()
 plt.savefig('polynomial.png')
 
 
-# There is no need to split the data here. Just simply treat the whole data as training data. The plots for
-# each degree can be either in the same graph (preferable) or in different ones.
-
 # Section 1.3: Evaluation (10%).
 # Using the returned results of the pol_regression function from the previous section, you need now
 # to evaluate the performance of your algorithm. To do so, you first need to implement the following
@@ -364,6 +361,9 @@ for i in featureNames:
     print("Control Mode Values ", featureNames[i])
     print(controlHivDataset.mode())
 
+# normalise the dataset
+normalisedHivDataset=(hivDataset-hivDataset.min())/(hivDataset.max()-hivDataset.min())
+
 
 # Section 3.2 Designing algorithms (15%)
 # You will now design an artificial neural network (ANN) classifier for classifying patients as patient
@@ -385,9 +385,9 @@ for i in featureNames:
 
 # x are features to be fed into the classifiers
 # y are labels that are to be predicted by the classifiers
-xHivDataset = hivDataset.values
-xHivDataset = hivDataset.iloc[: , :-1]
-yHivDataset =  hivDataset["Participant Condition"].values
+xHivDataset = normalisedHivDataset.values
+xHivDataset = normalisedHivDataset.iloc[: , :-1]
+yHivDataset =  normalisedHivDataset["Participant Condition"].values
 
 xTrainData, xTestData, yTrainData, yTestData = train_test_split(xHivDataset, yHivDataset, train_size = 0.90, test_size = 0.10)
 
@@ -443,21 +443,21 @@ folds = 10
 kfolds = KFold(n_splits=folds)
 
 mlpClassifier1 = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=epochAmount)
-mlpCV1 = cross_validate(mlpClassifier1, xTestData, yTestData, cv=kfolds, n_jobs=-1)
+mlpCV1 = cross_validate(mlpClassifier1, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(mlpCV1["test_score"].mean())
 mlpClassifier2 = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
-mlpCV2 = cross_validate(mlpClassifier2, xTestData, yTestData, cv=kfolds, n_jobs=-1)
+mlpCV2 = cross_validate(mlpClassifier2, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(mlpCV2["test_score"].mean())
 mlpClassifier3 = MLPClassifier(hidden_layer_sizes=(1000,1000), activation="logistic", max_iter=epochAmount)
-mlpCV3 = cross_validate(mlpClassifier3, xTestData, yTestData, cv=kfolds, n_jobs=-1)
+mlpCV3 = cross_validate(mlpClassifier3, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(mlpCV3["test_score"].mean())
 
 forestClassifier1 = RandomForestClassifier(n_estimators=50, min_samples_leaf=10)
-forestCV1 = cross_validate(forestClassifier1, xTestData, yTestData, cv=kfolds, n_jobs=-1)
+forestCV1 = cross_validate(forestClassifier1, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(forestCV1["test_score"].mean())
 forestClassifier2 = RandomForestClassifier(n_estimators=500, min_samples_leaf=10)
-forestCV2 = cross_validate(forestClassifier2, xTestData, yTestData, cv=kfolds, n_jobs=-1)
+forestCV2 = cross_validate(forestClassifier2, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(forestCV2["test_score"].mean())
 forestClassifier3 = RandomForestClassifier(n_estimators=1000, min_samples_leaf=10)
-forestCV3 = cross_validate(forestClassifier3, xTestData, yTestData, cv=kfolds, n_jobs=-1)
+forestCV3 = cross_validate(forestClassifier3, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(forestCV3["test_score"].mean())
