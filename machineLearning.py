@@ -340,39 +340,29 @@ seaborn.boxplot(x=hivDataset["Participant Condition"], y=hivDataset["Alpha"])
 # density plot 
 seaborn.displot(x=hivDataset["Beta"], kind = "kde", hue=hivDataset["Participant Condition"])
 
-# for i in featureNames:
-#     plt.figure()
-#     seaborn.boxplot(x=hivDataset["Status"], y=hivDataset[i])
-#     print("\nNormal" + i)
-#     print("MINIMUM: ") 
-#     print(hivDataset[i].max())
-#     print("MAX: ") 
-#     print(hivDataset[i].min())
-#     print("MEAN: ") 
-#     print(hivDataset[i].mean())
-#     print("MEDIAN: ") 
-#     print(hivDataset[i].median())
-#     print("MODE: ") 
-#     print(hivDataset[i].mode())
-#     print("VAR: ") 
-#     print(hivDataset[i].var())
-#     print("\nAbnormal "+ i)
-#     print("MINIMUM: ") 
-#     print(hivDataset[i].max())
-#     print("MAX: ") 
-#     print(hivDataset[i].min())
-#     print("MEAN: ") 
-#     print(hivDataset[i].mean())
-#     print("MEDIAN: ") 
-#     print(hivDataset[i].median())
-#     print("MODE: ") 
-#     print(hivDataset[i].mode())
-#     print("VAR: ") 
-#     print(hivDataset[i].var())
-#     print()
-#     plt.savefig('Graph '+i)
 plt.show()
 
+patientHivDataset = hivDataset.loc[hivDataset['Participant Condition'] == "Patient"]
+controlHivDataset = hivDataset.loc[hivDataset["Participant Condition"] == "Control"]
+
+featureNames = hivDataset.columns.values
+featureNames.drop(columns=["Image number","Bifurcation number","Artery (1)/ Vein (2)","Participant Condition"])
+
+# display sum statistics
+for i in featureNames:
+    sumStatisticsTable = {"Participant Condition": ["Patient","Control"], "Minimum": [patientHivDataset[i].min(), controlHivDataset[i].min()], 
+    "Maximum": [patientHivDataset[i].max(), controlHivDataset[i].max()], "Median": [patientHivDataset[i].median(), controlHivDataset[i].median()], 
+    "Mean": [patientHivDataset[i].mean(),controlHivDataset[i].mean()], "Variance": [controlHivDataset[i].var(), controlHivDataset[i].var()], 
+    "Standard Devation": [patientHivDataset[i].std(), controlHivDataset[i].std()]} 
+    print(pandas.DataFrame(data=sumStatisticsTable))
+
+# if multiple mode values, display all
+for i in featureNames:
+    print("Patient Mode Values ", featureNames[i])
+    print(patientHivDataset.mode())
+
+    print("Control Mode Values ", featureNames[i])
+    print(controlHivDataset.mode())
 
 
 # Section 3.2 Designing algorithms (15%)
