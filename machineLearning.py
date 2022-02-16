@@ -446,3 +446,11 @@ print(forestClassifier.score(xTestData, yTestData))
 # the best model yet. With the results you have had so far,
 # a) which method is best, ANN or random forest?
 # b) Please discuss and justify your choice, reflecting upon your knowledge thus far. 
+
+mlpClassifier = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=epochAmount)
+mlpClassifier = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
+mlpClassifier = MLPClassifier(hidden_layer_sizes=(1000,1000), activation="logistic", max_iter=epochAmount)
+
+forestClassifier = RandomForestClassifier(n_estimators=50, min_samples_leaf=5)
+forestClassifier = RandomForestClassifier(n_estimators=500, min_samples_leaf=5)
+forestClassifier = RandomForestClassifier(n_estimators=1000, min_samples_leaf=5)
