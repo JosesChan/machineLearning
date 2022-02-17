@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import pandas
 import seaborn
 
+from sklearn import preprocessing
 from sklearn.model_selection import KFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
@@ -345,8 +346,11 @@ for i in featureNames:
     print(controlHivDataset[i].mode())
 
 # normalise the dataset
-for i in featureNames:
-    normalisedHivDataset=(hivDataset[i]-hivDataset[i].min())/(hivDataset[i].max()-hivDataset[i].min())
+# for i in featureNames:
+#     normalisedHivDataset=(hivDataset[i]-hivDataset[i].min())/(hivDataset[i].max()-hivDataset[i].min())
+#     hivDataset[i] = normalisedHivDataset[i]
+
+
 
 
 # Section 3.2 Designing algorithms (15%)
@@ -369,9 +373,9 @@ for i in featureNames:
 
 # x are features to be fed into the classifiers
 # y are labels that are to be predicted by the classifiers
-xHivDataset = normalisedHivDataset.values
-xHivDataset = normalisedHivDataset.iloc[: , :-1]
-yHivDataset =  normalisedHivDataset["Participant Condition"].values
+xHivDataset = hivDataset.values
+xHivDataset = hivDataset.iloc[: , :-1]
+yHivDataset =  hivDataset["Participant Condition"].values
 
 xTrainData, xTestData, yTrainData, yTestData = train_test_split(xHivDataset, yHivDataset, train_size = 0.90, test_size = 0.10)
 
@@ -400,7 +404,7 @@ def runForestClassifier(leafSamples):
 
 
 def plotAccuracyFunction(datapoints):
-    plt.plot(range(len(datapoints)), datapoints, 'o-', label='Accuracy MLP')
+    plt.plot([100,200,300,400,500],range(len(datapoints)), datapoints, 'o-', label='Accuracy MLP')
     plt.xlabel("Epochs")
     plt.ylabel("Accuracy")
     plt.legend()
