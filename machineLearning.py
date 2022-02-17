@@ -381,7 +381,7 @@ accuracyPlot = []
 epochs = [1,10,50,100,200,300,400,500]
 
 print("MLP Accuracy")
-accuracyPlot.append(runMLPClassifier(1))
+accuracyPlot.append(runMLPClassifier(5))
 accuracyPlot.append(runMLPClassifier(10))
 accuracyPlot.append(runMLPClassifier(50))
 accuracyPlot.append(runMLPClassifier(100))
