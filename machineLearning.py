@@ -1,11 +1,9 @@
-from cmath import sqrt
 import numpy
 import numpy.linalg as linalg
 import matplotlib as plt
 import matplotlib.pyplot as plt
 import pandas
 import seaborn
-
 from sklearn import preprocessing
 from sklearn.model_selection import KFold
 from sklearn.ensemble import RandomForestClassifier
@@ -15,18 +13,18 @@ from sklearn.model_selection import cross_validate, train_test_split
 polyTest = pandas.read_csv("Task1 - dataset - pol_regression.csv")
 dataframe = pandas.read_csv("Task2 - dataset - dog_breeds.csv")
 hivDataset = pandas.read_csv("Task3 - dataset - HIV RVG.csv")
-dataset = dataframe.values
 
 # Section 1.1: Implementation of Polynomial Regression (10%).
 # You are asked to implement the polynomial regression algorithm. To do so, you are required to
 # use the following function:
 
+# calculate coefficients
 def pol_regression(features_train, y_train, degree):
     X = getPolynomialDataMatrix(features_train, degree)
     XX = X.transpose().dot(X)
-    if (degree == 0):
-        average = numpy.average(y_train)
-        meanList = numpy.ones(1,)
+    if (degree == 0): # if degree = 0, perform different operation
+        average = numpy.average(y_train) # find average of the dataset
+        meanList = numpy.ones(1,) # create list filled with 1s
         w = numpy.multiply(meanList, average)
         return w
     w = numpy.linalg.solve(XX, X.transpose().dot(y_train))
@@ -54,9 +52,9 @@ def getPolynomialDataMatrix(x, degree):
     
 # evaluatate polynomial coefficients
 def polynomialCoefficients(x, coefficients):
-    o = len(coefficients)
+    coeffAmounts = len(coefficients)
     y = 0
-    for i in range(o):
+    for i in range(coeffAmounts):
         y += coefficients[i]*x**i
     return y
 
@@ -98,7 +96,7 @@ plt.savefig('polynomial.png')
 # to evaluate the performance of your algorithm. To do so, you first need to implement the following
 # function:
 
-# may output with imaginary units
+# Get RSME from SSE
 def eval_pol_regression(parameters, x, y, degree):
     # Sum squared error
     xTest = getPolynomialDataMatrix(x, degree)
@@ -109,19 +107,14 @@ def eval_pol_regression(parameters, x, y, degree):
     rmse = numpy.sqrt(mse) # root of mse
     return (rmse)
 
-
-
 # error thrown
 # rmse0 = eval_pol_regression(w0, x_values, y_values, 0)
-
 rmse1 = eval_pol_regression(w1, x_values, y_values, 1)
 rmse2 = eval_pol_regression(w2, x_values, y_values, 2)
 rmse3 = eval_pol_regression(w3, x_values, y_values, 3)
 rmse6 = eval_pol_regression(w6, x_values, y_values, 6)
 rmse10 = eval_pol_regression(w10, x_values, y_values, 10)
 print(rmse1, rmse2, rmse3, rmse6, rmse10)
-
-
 
 # The eval_pol_regression function takes as arguments the parameters computed from the
 # pol_regression function and evaluates the algorithm’s performance on the input x and output y
@@ -169,13 +162,17 @@ plt.show()
 # • The function initialise_centroids() randomly initializes the centroids
 # • The function kmeans() clusters the data into k groups 
 
+dataset = dataframe.values
+
 # calculates the distance between samples
 def compute_euclidean_distance(vec_1, vec_2):
-    length = len(vec_1)
     euclidDistance = 0
+    length = len(vec_1)
+    # find euclid distance
     for i in range(length):
-        euclidDistance += pow(vec_1[i] - vec_2[i],2)#power of 2
-    return numpy.sqrt(euclidDistance)
+        euclidDistance += pow(vec_1[i] - vec_2[i],2)
+    euclidDistance = numpy.sqrt(euclidDistance)
+    return euclidDistance
 
 # intialise center of clusters
 def initialise_centroids(dataset, k):
@@ -188,7 +185,7 @@ def initialise_centroids(dataset, k):
 
 # cluster into k amount of groups, calculating average distance between centroids and data
 def kmeans(dataset, k):
-    
+
     # initialise centroids and other variables
     centroids = initialise_centroids(dataset, k) #creating the first centroids
     distance = numpy.zeros(k)
@@ -204,8 +201,6 @@ def kmeans(dataset, k):
         # recalculate centroids
         centroids = recalculateCentroids(sumMinCentroids, clusters, dataset, k)
     return centroids, clusters, datapoints
-
-
 
 # meanCentroid holds the average distance of each centroid
 # clusters holds the available types of clusters data can be categorized under
@@ -257,48 +252,19 @@ def plotCluster(dataset, centroids, clusters, x, y, labels):
     plt.show()    
 
 
-# centroids, clusters, datapoints = kmeans(dataset, 2)
-# plotErrorFunction(datapoints)
-# plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
-# plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
-# plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
+centroids, clusters, datapoints = kmeans(dataset, 2)
+plotErrorFunction(datapoints)
+plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
 
 
-# centroids, clusters, datapoints = kmeans(dataset, 3)
-# plotErrorFunction(datapoints)
-# plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
-# plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
-# plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
+centroids, clusters, datapoints = kmeans(dataset, 3)
+plotErrorFunction(datapoints)
+plotCluster(dataset,centroids,clusters,0,1,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,2,dataframe.columns) 
+plotCluster(dataset,centroids,clusters,0,3,dataframe.columns) 
 
-
-# HIV (human immunodeficiency virus) is a virus that attacks the body's immune system. If HIV is not
-# treated, it can lead to AIDS (acquired immunodeficiency syndrome). In this task, you are required
-# to develop machine learning models to predict HIV infection from measured features. The dataset
-# “Task3 - dataset - HIV RVG.csv” provided consists of clinical records of both HIV patients and
-# controls (healthy). The data has 5 retinal vascular geometry (RVG) features extracted from retinal
-# images; the RVG features are described in [1].
-# Image
-# number
-# Bifurcation
-# number
-# Artery (1)/
-# Vein (2) Alpha Beta Lambda Lambda1 Lambda2 Participant
-# Condition
-# 1 1 1 0.60009863 2.14118476 0.77466034 1.15678779 0.89611761 Patient
-# 1 2 1 0.82261224 1.83585755 0.90697974 1.00362703 0.91026938 Patient
-# Each image consists of a set of bifurcations. A bifurcation can be either artery or vein. The
-# extracted features from each bifurcation are Alpha, Beta, Lambda, Lambda1 and Lmbda2.
-# Participant condition is either patient or control.
-# [1] Al-Diri, B. and Hunter, A., 2009. Automated measurements of retinal bifurcations. In World
-# Congress on Medical Physics and Biomedical Engineering, September 7-12, 2009, Munich,
-# Germany (pp. 205-208). Springer, Berlin, Heidelberg.
-# The class membership of each row is stored in the field “Status”. Status refers to the health
-# condition of patients, or in other words, we consider this to be our label/annotation for the sake
-# of all implementations. Unit of measurement or range of values of each feature are not relevant.
-# However, features can be at different scales and/or measured in different units. Our task is to
-# develop a set of classification models for automatically classifying patients as healthy or HIV
-# infected, based on the RVG features. No prior knowledge of the domain problem is needed or
-# assumed to fulfil the requirements of this assessment whatsoever.
 
 # Section 3.1: Data import, summary, pre-processing and visualisation (10%)
 # As a first step, you need to load the data set from the .xlsx file into a Python IDE. You should then
@@ -346,7 +312,7 @@ for i in featureNames:
     print(controlHivDataset[i].mode())
 
 # normalise the dataset
-# for i in featureNames:
+# for i in ["alpha","beta"]:
 #     normalisedHivDataset=(hivDataset[i]-hivDataset[i].min())/(hivDataset[i].max()-hivDataset[i].min())
 #     hivDataset[i] = normalisedHivDataset[i]
 
@@ -404,7 +370,7 @@ def runForestClassifier(leafSamples):
 
 
 def plotAccuracyFunction(datapoints):
-    plt.plot([100,200,300,400,500],range(len(datapoints)), datapoints, 'o-', label='Accuracy MLP')
+    plt.plot(datapoints, 'o-', label='Accuracy MLP')
     plt.xlabel("Epochs")
     plt.ylabel("Accuracy")
     plt.legend()
@@ -417,6 +383,11 @@ accuracyPlot.append(runMLPClassifier(200))
 accuracyPlot.append(runMLPClassifier(300))
 accuracyPlot.append(runMLPClassifier(400))
 accuracyPlot.append(runMLPClassifier(500))
+accuracyPlot.append(runMLPClassifier(600))
+accuracyPlot.append(runMLPClassifier(700))
+accuracyPlot.append(runMLPClassifier(800))
+accuracyPlot.append(runMLPClassifier(900))
+accuracyPlot.append(runMLPClassifier(1000))
 
 runForestClassifier(5)
 runForestClassifier(10)
