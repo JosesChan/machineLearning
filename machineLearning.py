@@ -378,19 +378,17 @@ def plotAccuracyFunction(listOfEpochs,datapoints):
     plt.show()
 
 accuracyPlot = []
-epochs = [100,200,300,400,500,600,700,800,900,1000]
+epochs = [1,10,50,100,200,300,400,500]
 
 print("MLP Accuracy")
+accuracyPlot.append(runMLPClassifier(1))
+accuracyPlot.append(runMLPClassifier(10))
+accuracyPlot.append(runMLPClassifier(50))
 accuracyPlot.append(runMLPClassifier(100))
 accuracyPlot.append(runMLPClassifier(200))
 accuracyPlot.append(runMLPClassifier(300))
 accuracyPlot.append(runMLPClassifier(400))
 accuracyPlot.append(runMLPClassifier(500))
-accuracyPlot.append(runMLPClassifier(600))
-accuracyPlot.append(runMLPClassifier(700))
-accuracyPlot.append(runMLPClassifier(800))
-accuracyPlot.append(runMLPClassifier(900))
-accuracyPlot.append(runMLPClassifier(1000))
 
 print("Random Forest Accuracy")
 runForestClassifier(5)
