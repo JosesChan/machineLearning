@@ -243,8 +243,8 @@ def plotErrorFunction(datapoints):
 
 # plot cluster graphs
 def plotCluster(dataset, centroids, clusters, xAxis, yAxis, labels):
-    plt.scatter(dataset[:,xAxis],dataset[:,yAxis], c = clusters)
-    plt.scatter(centroids[:,xAxis], centroids[:,yAxis], c = 'r')
+    plt.scatter(dataset[:,xAxis],dataset[:,yAxis], c=clusters)
+    plt.scatter(centroids[:,xAxis], centroids[:,yAxis], c='r')
     plt.xlabel(labels[xAxis])
     plt.ylabel(labels[yAxis])
     plt.show()    
@@ -302,12 +302,15 @@ for i in featureNames:
     print(pandas.DataFrame(data=sumStatisticsTable))
 
 # if multiple mode values, display all
-for i in featureNames:
+for i in hivDataset.columns.values:
     print(i)
     print("Patient Mode Values ")
     print(patientHivDataset[i].mode())
     print("Control Mode Values ")
     print(controlHivDataset[i].mode())
+
+
+
 
 # normalise the dataset
 # for i in ["alpha","beta"]:
