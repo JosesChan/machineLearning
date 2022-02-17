@@ -171,8 +171,7 @@ def compute_euclidean_distance(vec_1, vec_2):
     # find euclid distance
     for i in range(length):
         euclidDistance += pow(vec_1[i] - vec_2[i],2)
-    euclidDistance = numpy.sqrt(euclidDistance)
-    return euclidDistance
+    return numpy.sqrt(euclidDistance)
 
 # intialise center of clusters
 def initialise_centroids(dataset, k):
@@ -368,16 +367,18 @@ def runForestClassifier(leafSamples):
 
     print(forestClassifier.score(xTestData, yTestData))
 
-
-def plotAccuracyFunction(datapoints):
-    plt.plot(datapoints, 'o-', label='Accuracy MLP')
+# could probably have epochs in a list and looped
+def plotAccuracyFunction(listOfEpochs,datapoints):
+    plt.plot(listOfEpochs, datapoints, 'o-', label='Accuracy MLP')
     plt.xlabel("Epochs")
     plt.ylabel("Accuracy")
     plt.legend()
     plt.show()
 
 accuracyPlot = []
+epochs = [100,200,300,400,500,600,700,800,900,1000]
 
+print("MLP Accuracy")
 accuracyPlot.append(runMLPClassifier(100))
 accuracyPlot.append(runMLPClassifier(200))
 accuracyPlot.append(runMLPClassifier(300))
@@ -389,10 +390,11 @@ accuracyPlot.append(runMLPClassifier(800))
 accuracyPlot.append(runMLPClassifier(900))
 accuracyPlot.append(runMLPClassifier(1000))
 
+print("Random Forest Accuracy")
 runForestClassifier(5)
 runForestClassifier(10)
 
-plotAccuracyFunction(accuracyPlot)
+plotAccuracyFunction(epochs, accuracyPlot)
 
 chosenEpoch = 500
 
