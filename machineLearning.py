@@ -177,8 +177,8 @@ def compute_euclidean_distance(vec_1, vec_2):
 def initialise_centroids(dataset, k):
     centroids = numpy.zeros([k,4]) 
     for i in range(k):
-        randomInt = numpy.random.randint(0,len(dataset))
-        centroids[i] = dataset[randomInt]    
+        # randomInt = numpy.random.randint(0,len(dataset))
+        centroids[i] = dataset[numpy.random.randint(0,len(dataset))]    
     return centroids
 
 
