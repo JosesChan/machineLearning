@@ -1,6 +1,5 @@
 from cmath import sqrt
 import numpy
-import numpy as np
 import numpy.linalg as linalg
 import matplotlib as plt
 import matplotlib.pyplot as plt
@@ -109,12 +108,17 @@ def eval_pol_regression(parameters, x, y, degree):
     rmse = numpy.sqrt(mse) # root of mse
     return (rmse)
 
+
+
+# error thrown
 # rmse0 = eval_pol_regression(w0, x_values, y_values, 0)
+
 rmse1 = eval_pol_regression(w1, x_values, y_values, 1)
 rmse2 = eval_pol_regression(w2, x_values, y_values, 2)
 rmse3 = eval_pol_regression(w3, x_values, y_values, 3)
 rmse6 = eval_pol_regression(w6, x_values, y_values, 6)
 rmse10 = eval_pol_regression(w10, x_values, y_values, 10)
+print(rmse1, rmse2, rmse3, rmse6, rmse10)
 
 
 
@@ -137,58 +141,19 @@ rmse10 = eval_pol_regression(w10, x_values, y_values, 10)
 
 xTrainDataT1, xTestDataT1, yTrainDataT1, yTestDataT1 = train_test_split(polyTest['x'], polyTest['y'], train_size = 0.70, test_size = 0.30)
 
-# #training
-# w0 = pol_regression(x_values,y_values,0)
-# coefficients0 = polynomialCoefficients(x_values_sorted,w0)
+RMSEtrain = numpy.zeros((10,1))
+RMSEtest = numpy.zeros((10,1))
 
-# w1 = pol_regression(x_values,y_values,1)
-# coefficients1 = polynomialCoefficients(x_values_sorted,w1)
-
-# w2 = pol_regression(x_values,y_values,2)
-# coefficients2 = polynomialCoefficients(x_values_sorted,w2)
-
-# w3 = pol_regression(x_values,y_values,3)
-# coefficients3 = polynomialCoefficients(x_values_sorted,w3)
-
-# w6 = pol_regression(x_values,y_values,6)
-# coefficients6 = polynomialCoefficients(x_values_sorted,w6)
-
-# w10 = pol_regression(x_values,y_values,10)
-# coefficients10 = polynomialCoefficients(x_values_sorted,w10)
-
-# # testing
-# w0 = pol_regression(x_values,y_values,0)
-# coefficients0 = polynomialCoefficients(x_values_sorted,w0)
-
-# w1 = pol_regression(x_values,y_values,1)
-# coefficients1 = polynomialCoefficients(x_values_sorted,w1)
-
-# w2 = pol_regression(x_values,y_values,2)
-# coefficients2 = polynomialCoefficients(x_values_sorted,w2)
-
-# w3 = pol_regression(x_values,y_values,3)
-# coefficients3 = polynomialCoefficients(x_values_sorted,w3)
-
-# w6 = pol_regression(x_values,y_values,6)
-# coefficients6 = polynomialCoefficients(x_values_sorted,w6)
-
-# w10 = pol_regression(x_values,y_values,10)
-# coefficients10 = polynomialCoefficients(x_values_sorted,w10)
-
-
-# Feel free to use the functions getWeightsForPolynomialFit and getPolynomialDataMatrix
-RMSEtrain = np.zeros((10,1))
-RMSEtest = np.zeros((10,1))
+# loop 0 to 10
 for i in range(1,11):
-    parameters = pol_regression(xTrainDataT1, yTrainDataT1, i)
-    RMSEtrain[i-1] = eval_pol_regression(parameters,xTrainDataT1, yTrainDataT1, i)
-    RMSEtest[i-1] = eval_pol_regression(parameters,xTestDataT1, yTestDataT1, i)    
+    RMSEtrain[i-1] = eval_pol_regression(pol_regression(xTrainDataT1, yTrainDataT1, i),xTrainDataT1, yTrainDataT1, i)
+    RMSEtest[i-1] = eval_pol_regression(pol_regression(xTrainDataT1, yTrainDataT1, i),xTestDataT1, yTestDataT1, i)    
 
-plt.figure();
-plt.semilogy(range(1,12), rmseTrain)
-plt.semilogy(range(1,12), rmseTest)
-plt.legend(('SSE on training set', 'SSE on test set'))
-plt.savefig('polynomial_evaluation.png')
+# plot graph 1 - 10 degrees
+plt.semilogy(range(1,11), RMSEtrain) # plot training rmse function
+plt.semilogy(range(1,11), RMSEtest) # plot testing rmse function
+plt.legend(('RMSE Training Dataset', 'RMSE Testing Dataset'))
+plt.savefig('poly_evaluation.png')
 plt.show()
 
 # Task 2 (30%): In this task, several data for specific dog breeds have been collected. You will need
@@ -209,13 +174,13 @@ def compute_euclidean_distance(vec_1, vec_2):
     euclidDistance = 0
     for i in range(length):
         euclidDistance += pow(vec_1[i] - vec_2[i],2)#power of 2
-    return np.sqrt(euclidDistance)
+    return numpy.sqrt(euclidDistance)
 
 # intialise center of clusters
 def initialise_centroids(dataset, k):
-    centroids = np.zeros([k,4]) 
+    centroids = numpy.zeros([k,4]) 
     for i in range(k):
-        randomInt = np.random.randint(0,len(dataset))
+        randomInt = numpy.random.randint(0,len(dataset))
         centroids[i] = dataset[randomInt]    
     return centroids
 
@@ -225,8 +190,8 @@ def kmeans(dataset, k):
     
     # initialise centroids and other variables
     centroids = initialise_centroids(dataset, k) #creating the first centroids
-    distance = np.zeros(k)
-    clusters = np.zeros(len(dataset)) 
+    distance = numpy.zeros(k)
+    clusters = numpy.zeros(len(dataset)) 
     datapoints = [] # all summation values for error function
 
     # number of iterations for recalculation
@@ -246,7 +211,7 @@ def kmeans(dataset, k):
 # using the parameters, it recalculates centroid locations
 def recalculateCentroids(sumMinCentroids, clusters, dataset, k):
     # variable to store centroid locations
-    newCentroids = np.zeros([k,4])
+    newCentroids = numpy.zeros([k,4])
     # recalculate each centroid
     for selectedCentroid in range(k):
         for features in range(4):
@@ -256,7 +221,7 @@ def recalculateCentroids(sumMinCentroids, clusters, dataset, k):
 
 # distance represents the distance between centroid and its closest datapoint
 def recalculateClusters(distance, centroids, clusters, dataset, k):
-    sumMinCentroids = np.zeros([k,4])
+    sumMinCentroids = numpy.zeros([k,4])
     errorFunction = 0
     # for entire dataset, find closest datapoints
     for currentDataPoint in range(len(dataset)):    
@@ -265,7 +230,7 @@ def recalculateClusters(distance, centroids, clusters, dataset, k):
             distance[selectedCentroid] = compute_euclidean_distance(dataset[currentDataPoint], centroids[selectedCentroid])
             
         # find datapoint with minimum distance through index values
-        closest = np.where(distance == np.min(distance))[0][0]
+        closest = numpy.where(distance == numpy.min(distance))[0][0]
             
         # post processing
         errorFunction += distance[closest]  
@@ -358,11 +323,13 @@ plt.show()
 patientHivDataset = hivDataset.loc[hivDataset['Participant Condition'] == "Patient"]
 controlHivDataset = hivDataset.loc[hivDataset["Participant Condition"] == "Control"]
 
-featureNames = hivDataset.columns.values
-featureNames.drop(columns=["Image number","Bifurcation number","Artery (1)/ Vein (2)","Participant Condition"])
+featureNames = hivDataset.drop(columns=["Image number","Bifurcation number","Artery (1)/ Vein (2)","Participant Condition"])
+featureNames = featureNames.columns.values
+
 
 # display sum statistics
 for i in featureNames:
+    print(i)
     sumStatisticsTable = {"Participant Condition": ["Patient","Control"], "Minimum": [patientHivDataset[i].min(), controlHivDataset[i].min()], 
     "Maximum": [patientHivDataset[i].max(), controlHivDataset[i].max()], "Median": [patientHivDataset[i].median(), controlHivDataset[i].median()], 
     "Mean": [patientHivDataset[i].mean(),controlHivDataset[i].mean()], "Variance": [controlHivDataset[i].var(), controlHivDataset[i].var()], 
@@ -371,14 +338,15 @@ for i in featureNames:
 
 # if multiple mode values, display all
 for i in featureNames:
-    print("Patient Mode Values ", featureNames[i])
-    print(patientHivDataset.mode())
-
-    print("Control Mode Values ", featureNames[i])
-    print(controlHivDataset.mode())
+    print(i)
+    print("Patient Mode Values ")
+    print(patientHivDataset[i].mode())
+    print("Control Mode Values ")
+    print(controlHivDataset[i].mode())
 
 # normalise the dataset
-normalisedHivDataset=(hivDataset-hivDataset.min())/(hivDataset.max()-hivDataset.min())
+for i in featureNames:
+    normalisedHivDataset=(hivDataset[i]-hivDataset[i].min())/(hivDataset[i].max()-hivDataset[i].min())
 
 
 # Section 3.2 Designing algorithms (15%)
