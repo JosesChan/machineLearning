@@ -20,14 +20,14 @@ hivDataset = pandas.read_csv("Task3 - dataset - HIV RVG.csv")
 
 # calculate coefficients
 def pol_regression(features_train, y_train, degree):
-    X = getPolynomialDataMatrix(features_train, degree)
-    XX = X.transpose().dot(X)
+    xDataMatrix = getPolynomialDataMatrix(features_train, degree)
+    xDotProduct = xDataMatrix.transpose().dot(xDataMatrix)
     if (degree == 0): # if degree = 0, perform different operation
         average = numpy.average(y_train) # find average of the dataset
         meanList = numpy.ones(1,) # create list filled with 1s
         w = numpy.multiply(meanList, average)
         return w
-    w = numpy.linalg.solve(XX, X.transpose().dot(y_train))
+    w = numpy.linalg.solve(xDotProduct, xDataMatrix.transpose().dot(y_train))
     return w  
 
 # Section 1.2: Regress a polynomial of the following degrees: 0, 1, 2, 3, 6, 10 (10%).
@@ -45,10 +45,10 @@ x_values_sorted = numpy.sort(x_values)
 degreesList = [0, 1, 2, 3, 6, 10]
 
 def getPolynomialDataMatrix(x, degree):
-    X = numpy.ones(x.shape)
+    xDataMatrix = numpy.ones(x.shape)
     for i in range(1,degree + 1):
-        X = numpy.column_stack((X, x ** i))
-    return X
+        xDataMatrix = numpy.column_stack((X, x ** i))
+    return xDataMatrix
     
 # evaluatate polynomial coefficients
 def polynomialCoefficients(x, coefficients):
