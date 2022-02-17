@@ -103,10 +103,10 @@ def eval_pol_regression(parameters, x, y, degree):
     # Sum squared error
     xTest = getPolynomialDataMatrix(x, degree)
     yTest = xTest.dot(parameters)
-    error = y-yTest
-    sse = error.dot(error)
-    mse = sse/len(x)
-    rmse = sqrt(mse)
+    error = yTest-y # calculate difference
+    sse = error**2 # square of diffences 
+    mse = numpy.mean(sse) # mean of difference squared
+    rmse = numpy.sqrt(mse) # root of mse
     return (rmse)
 
 # rmse0 = eval_pol_regression(w0, x_values, y_values, 0)
