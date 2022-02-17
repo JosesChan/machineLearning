@@ -242,12 +242,11 @@ def plotErrorFunction(datapoints):
     plt.show()
 
 # plot cluster graphs
-def plotCluster(dataset, centroids, clusters, x, y, labels):
-    #only showing column 0 1 or 0 and 2 (height and tail-length/ leg-length)
-    plt.scatter(dataset[:,x],dataset[:,y], c = clusters)
-    plt.scatter(centroids[:,x], centroids[:,y], c = 'r')
-    plt.xlabel(labels[x])
-    plt.ylabel(labels[y])
+def plotCluster(dataset, centroids, clusters, xAxis, yAxis, labels):
+    plt.scatter(dataset[:,xAxis],dataset[:,yAxis], c = clusters)
+    plt.scatter(centroids[:,xAxis], centroids[:,yAxis], c = 'r')
+    plt.xlabel(labels[xAxis])
+    plt.ylabel(labels[yAxis])
     plt.show()    
 
 
