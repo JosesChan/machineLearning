@@ -177,21 +177,12 @@ xTrainDataT1, xTestDataT1, yTrainDataT1, yTestDataT1 = train_test_split(polyTest
 
 
 # Feel free to use the functions getWeightsForPolynomialFit and getPolynomialDataMatrix
-for i in range(1,12):
-    
-    Xtrain = getPolynomialDataMatrix(x_train, i) 
-    Xtest = getPolynomialDataMatrix(x_test, i)
-    
-    w = getWeightsForPolynomialFit(x_train, y_train, i)  
-    
-    MSSEtrain[i - 1] = np.mean((Xtrain.dot(w) - y_train)**2)
-    MSSEtest[i - 1] = np.mean((Xtest.dot(w) - y_test)**2)
-    
-    errortrain = y_train - Xtrain.dot(w) 
-    errortest = y_test - Xtest.dot(w)
-    SSEtrain[i-1] = errortrain.dot(errortrain)
-    SSEtest[i-1] = errortest.dot(errortest)
-    
+RMSEtrain = np.zeros((10,1))
+RMSEtest = np.zeros((10,1))
+for i in range(1,11):
+    parameters = pol_regression(xTrainDataT1, yTrainDataT1, i)
+    RMSEtrain[i-1] = eval_pol_regression(parameters,xTrainDataT1, yTrainDataT1, i)
+    RMSEtest[i-1] = eval_pol_regression(parameters,xTestDataT1, yTestDataT1, i)    
 
 plt.figure();
 plt.semilogy(range(1,12), rmseTrain)
