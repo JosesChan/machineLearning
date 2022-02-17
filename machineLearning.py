@@ -396,7 +396,7 @@ runForestClassifier(10)
 
 plotAccuracyFunction(epochs, accuracyPlot)
 
-chosenEpoch = 500
+chosenEpoch = 100
 
 # Section 3.3: Model selection (15%)
 # You have designed ANN and random forests classifiers with almost fixed model parameters (e.g.
