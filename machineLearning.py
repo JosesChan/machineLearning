@@ -175,6 +175,31 @@ xTrainDataT1, xTestDataT1, yTrainDataT1, yTestDataT1 = train_test_split(polyTest
 # w10 = pol_regression(x_values,y_values,10)
 # coefficients10 = polynomialCoefficients(x_values_sorted,w10)
 
+
+# Feel free to use the functions getWeightsForPolynomialFit and getPolynomialDataMatrix
+for i in range(1,12):
+    
+    Xtrain = getPolynomialDataMatrix(x_train, i) 
+    Xtest = getPolynomialDataMatrix(x_test, i)
+    
+    w = getWeightsForPolynomialFit(x_train, y_train, i)  
+    
+    MSSEtrain[i - 1] = np.mean((Xtrain.dot(w) - y_train)**2)
+    MSSEtest[i - 1] = np.mean((Xtest.dot(w) - y_test)**2)
+    
+    errortrain = y_train - Xtrain.dot(w) 
+    errortest = y_test - Xtest.dot(w)
+    SSEtrain[i-1] = errortrain.dot(errortrain)
+    SSEtest[i-1] = errortest.dot(errortest)
+    
+
+plt.figure();
+plt.semilogy(range(1,12), rmseTrain)
+plt.semilogy(range(1,12), rmseTest)
+plt.legend(('SSE on training set', 'SSE on test set'))
+plt.savefig('polynomial_evaluation.png')
+plt.show()
+
 # Task 2 (30%): In this task, several data for specific dog breeds have been collected. You will need
 # to download the Task2 - dataset - dog_breeds.csv file. The data include four features, which are
 # height, tail length, leg length, and nose circumference for each dog breed. The purpose of this
@@ -435,6 +460,7 @@ runForestClassifier(10)
 
 plotAccuracyFunction(accuracyPlot)
 
+chosenEpoch = 500
 
 # Section 3.3: Model selection (15%)
 # You have designed ANN and random forests classifiers with almost fixed model parameters (e.g.
@@ -466,13 +492,13 @@ folds = 10
 # first n_samples%n_splits folds have the size of n_samples//n_splits+1, the rest are size of n_samples//n_splits
 kfolds = KFold(n_splits=folds)
 
-mlpClassifier1 = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=epochAmount)
+mlpClassifier1 = MLPClassifier(hidden_layer_sizes=(50,50), activation="logistic", max_iter=chosenEpoch)
 mlpCV1 = cross_validate(mlpClassifier1, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(mlpCV1["test_score"].mean())
-mlpClassifier2 = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=epochAmount)
+mlpClassifier2 = MLPClassifier(hidden_layer_sizes=(500,500), activation="logistic", max_iter=chosenEpoch)
 mlpCV2 = cross_validate(mlpClassifier2, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(mlpCV2["test_score"].mean())
-mlpClassifier3 = MLPClassifier(hidden_layer_sizes=(1000,1000), activation="logistic", max_iter=epochAmount)
+mlpClassifier3 = MLPClassifier(hidden_layer_sizes=(1000,1000), activation="logistic", max_iter=chosenEpoch)
 mlpCV3 = cross_validate(mlpClassifier3, xHivDataset, yHivDataset, cv=kfolds, n_jobs=-1)
 print(mlpCV3["test_score"].mean())
 
